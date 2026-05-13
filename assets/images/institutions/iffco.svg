@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 150" role="img" aria-labelledby="title">
+  <title id="title">IFFCO logo representation</title>
+  <rect width="360" height="150" fill="none"/>
+  <path d="M47 99c16-35 43-53 80-54-8 36-34 59-80 54Z" fill="#0A8F48"/>
+  <path d="M39 84c24-31 55-43 92-35-16 31-45 45-92 35Z" fill="#2DBE60"/>
+  <path d="M69 63c14-21 35-30 62-27-14 22-35 32-62 27Z" fill="#0E75BC"/>
+  <text x="153" y="86" fill="#0A8F48" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="900">IFFCO</text>
+  <text x="153" y="109" fill="#0E75BC" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="1.2">INDUSTRIAL</text>
+</svg>

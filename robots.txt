@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow anything that's not a real page
+Disallow: /assets/
+Disallow: /cdn-cgi/
+
+# Sitemap location
+Sitemap: https://www.caryaireengineers.in/sitemap.xml

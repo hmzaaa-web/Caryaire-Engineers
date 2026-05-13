@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 640" role="img" aria-labelledby="title desc">
+  <title id="title">Muzaffar Ali leadership portrait panel</title>
+  <desc id="desc">Premium non-photographic executive portrait-style illustration for the founder profile.</desc>
+  <defs>
+    <linearGradient id="bg" x1="63" y1="590" x2="462" y2="55" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#030509"/>
+      <stop offset=".55" stop-color="#07182D"/>
+      <stop offset="1" stop-color="#0066CC"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="30%" r="55%">
+      <stop stop-color="#7CCBFF" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#7CCBFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="520" height="640" rx="18" fill="url(#bg)"/>
+  <rect x="30" y="30" width="460" height="580" rx="12" fill="none" stroke="#fff" stroke-opacity=".16"/>
+  <circle cx="260" cy="175" r="160" fill="url(#glow)" opacity=".85"/>
+  <path d="M155 489c22-86 70-129 105-129s83 43 105 129v72H155v-72Z" fill="#0A111D"/>
+  <path d="M184 555h152l-28-132-48 49-48-49-28 132Z" fill="#0D66C2"/>
+  <path d="M197 250c5-76 50-116 63-116s58 40 63 116c4 66-25 117-63 117s-67-51-63-117Z" fill="#D8E6F6"/>
+  <path d="M183 244c15-78 63-118 77-118s64 33 78 118c-44-15-96-16-155 0Z" fill="#08101B"/>
+  <path d="M193 301c36 22 88 22 133 0-9 42-32 66-66 66-34 0-57-24-67-66Z" fill="#B9C8D8" opacity=".55"/>
+  <text x="260" y="86" fill="#fff" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="800" letter-spacing="4">FOUNDER</text>
+  <text x="260" y="594" fill="#7CCBFF" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" letter-spacing="3">ENGINEERING</text>
+</svg>

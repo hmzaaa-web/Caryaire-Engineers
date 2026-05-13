@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 150" role="img" aria-labelledby="title">
+  <title id="title">Punjab National Bank logo representation</title>
+  <rect width="360" height="150" fill="none"/>
+  <rect x="29" y="34" width="88" height="88" rx="6" fill="#FDB913"/>
+  <path d="M73 48c23 0 36 17 36 37 0 18-13 33-30 36v-26c5-3 8-8 8-14 0-8-6-15-14-15-9 0-15 7-15 15v40H36V81c0-20 15-33 37-33Z" fill="#A00013"/>
+  <text x="145" y="72" fill="#A00013" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="900">PNB</text>
+  <text x="145" y="101" fill="#A00013" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800" letter-spacing=".7">PUNJAB NATIONAL BANK</text>
+</svg>

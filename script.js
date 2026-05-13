@@ -1,88 +1,299 @@
-gsap.registerPlugin(MorphSVGPlugin);
+(function () {
+  "use strict";
 
-let yetiTL, chatterTL,
-  furLightColor = "#FFF",
-  furDarkColor = "#67b1e0",
-  skinLightColor = "#ddf1fa",
-  skinDarkColor = "#88c9f2",
-  lettersSideLight = "#3A7199",
-  lettersSideDark = "#051d2c",
-  lettersFrontLight = "#67B1E0",
-  lettersFrontDark = "#051d2c",
-  lettersStrokeLight = "#265D85",
-  lettersStrokeDark = "#031219",
-  mouthShape1 = "M149 115.7c-4.6 3.7-6.6 9.8-5 15.6.1.5.3 1.1.5 1.6.6 1.5 2.4 2.3 3.9 1.7l11.2-4.4 11.2-4.4c1.5-.6 2.3-2.4 1.7-3.9-.2-.5-.4-1-.7-1.5-2.8-5.2-8.4-8.3-14.1-7.9-3.7.2-5.9 1.1-8.7 3.2z",
-  mouthShape2 = "M161.2 118.9c0 2.2-1.8 4-4 4s-4-1.8-4-4c0-1 .4-2 1.1-2.7.7-.8 1.8-1.3 2.9-1.3 2.2 0 4 1.7 4 4z",
-  mouthShape3 = "M150.2 118.3c-4.6 3.7-7.5 6.4-6.3 12.3.1.5.1.6.3 1.1.6 1.5 2.4 2.3 3.9 1.7 0 0 7.9-4.3 10.7-5.5s11.6-3.3 11.6-3.3c1.5-.6 2.3-2.4 1.7-3.9-.2-.5-.2-.6-.4-1.1-2.8-5.2-7.1-4.9-12.9-4.6-3.7.4-6.3 1.5-8.6 3.3z",
-  mouthShape4 = "M149.2 116.7c-4.6 3.7-6.7 8.8-5.2 14.6.1.3.1.5.2.8.6 1.5 2.4 2.3 3.9 1.7l11.2-4.4 11.2-4.4c1.5-.6 2.3-2.4 1.7-3.9-.1-.3-.2-.5-.4-.7-2.8-5.2-8.2-7.2-14-6.9-3.6.2-5.9 1.1-8.6 3.2z";
+  const body = document.body;
+  const header = document.querySelector(".site-header");
+  const menuToggle = document.querySelector(".menu-toggle");
+  const mobileLinks = document.querySelectorAll(".mobile-panel a");
+  const cursorGlow = document.querySelector(".cursor-glow");
 
-chatterTL = gsap.timeline({ paused: true, repeat: -1, yoyo: true });
+  document.documentElement.classList.add("js");
 
-chatterTL
-  .to(['#mouthBG', '#mouthPath', '#mouthOutline'], { duration: 0.1, morphSVG: mouthShape4 }, 0)
-  .to('#chin', { duration: 0.1, y: 1.5 }, 0);
+  window.addEventListener("load", () => {
+    body.classList.add("loaded");
+    initCounters();
+    initGsap();
+  });
 
-yetiTL = gsap.timeline({ repeat: -1 });
+  window.addEventListener("scroll", () => {
+    if (!header) return;
+    header.classList.toggle("is-scrolled", window.scrollY > 18);
+  }, { passive: true });
 
-yetiTL
-  .add(() => chatterTL.play(), 0)
+  if (menuToggle) {
+    menuToggle.addEventListener("click", () => {
+      const open = body.classList.toggle("menu-open");
+      menuToggle.setAttribute("aria-expanded", String(open));
+    });
+  }
 
-  .to(['#armL', '#flashlightFront'], { duration: 0.075, x: 7 }, 2.5)
-  .to(['#armL', '#flashlightFront'], { duration: 0.075, x: 0 }, 2.575)
-  .to(['#armL', '#flashlightFront'], { duration: 0.075, x: 7 }, 2.65)
-  .to(['#armL', '#flashlightFront'], { duration: 0.075, x: 0 }, 2.725)
-  .to(['#armL', '#flashlightFront'], { duration: 0.075, x: 7 }, 2.8)
-  .to(['#armL', '#flashlightFront'], { duration: 0.075, x: 0 }, 2.875)
+  mobileLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      body.classList.remove("menu-open");
+      if (menuToggle) menuToggle.setAttribute("aria-expanded", "false");
+    });
+  });
 
-  .add(goLight, 3.2)
-  .add(goDark, 3.3)
-  .add(goLight, 3.4)
+  if (cursorGlow && window.matchMedia("(pointer: fine)").matches) {
+    window.addEventListener("pointermove", (event) => {
+      cursorGlow.style.setProperty("--x", `${event.clientX}px`);
+      cursorGlow.style.setProperty("--y", `${event.clientY}px`);
+    }, { passive: true });
+  }
 
-  .add(() => {
-    chatterTL.pause();
-    gsap.to(['#mouthBG', '#mouthPath', '#mouthOutline'], { duration: 0.1, morphSVG: mouthShape1 });
-  }, 3.2)
+  document.querySelectorAll(".faq-question").forEach((button) => {
+    button.addEventListener("click", () => {
+      const item = button.closest(".faq-item");
+      const answer = item.querySelector(".faq-answer");
+      const isOpen = item.classList.toggle("is-open");
+      button.setAttribute("aria-expanded", String(isOpen));
+      answer.style.maxHeight = isOpen ? `${answer.scrollHeight}px` : "0px";
+    });
+  });
 
-  .to(['#mouthBG', '#mouthPath', '#mouthOutline'], { duration: 0.25, morphSVG: mouthShape2 }, 5)
-  .to('#tooth1', { duration: 0.1, y: -5 }, 5)
-  .to('#armR', { duration: 0.5, x: 10, y: 30, rotation: 10, transformOrigin: "bottom center", ease: "power1.out" }, 4)
-  .to(['#eyeL', '#eyeR'], { duration: 0.25, scaleX: 1.4, scaleY: 1.4, transformOrigin: "center center" }, 5)
+  document.querySelectorAll(".accordion button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const item = button.closest(".accordion-item");
+      item.classList.toggle("is-open");
+    });
+  });
 
-  .add(goDark, 8)
-  .add(goLight, 8.1)
-  .add(goDark, 8.3)
-  .add(goLight, 8.4)
-  .add(goDark, 8.6)
+  document.querySelectorAll("[data-filter]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const filter = button.dataset.filter;
+      document.querySelectorAll("[data-filter]").forEach((btn) => btn.classList.remove("is-active"));
+      button.classList.add("is-active");
 
-  .to(['#mouthBG', '#mouthPath', '#mouthOutline'], { duration: 0.25, morphSVG: mouthShape1 }, 9)
-  .to('#tooth1', { duration: 0.1, y: 0 }, 9)
-  .to('#armR', { duration: 0.5, x: 0, y: 0, rotation: 0, transformOrigin: "bottom center", ease: "power1.out" }, 9)
-  .to(['#eyeL', '#eyeR'], { duration: 0.25, scaleX: 1, scaleY: 1, transformOrigin: "center center" }, 9)
-  .add(() => chatterTL.play(), 9.25)
+      document.querySelectorAll("[data-category]").forEach((card) => {
+        const show = filter === "all" || card.dataset.category.includes(filter);
+        card.classList.toggle("is-hidden", !show);
+      });
+    });
+  });
 
-  .to(['#armL', '#flashlightFront'], { duration: 0.075, x: 7 }, 11.5)
-  .to(['#armL', '#flashlightFront'], { duration: 0.075, x: 0 }, 11.575)
-  .to(['#armL', '#flashlightFront'], { duration: 0.075, x: 7 }, 11.65)
-  .to(['#armL', '#flashlightFront'], { duration: 0.075, x: 0 }, 11.725)
-  .to(['#armL', '#flashlightFront'], { duration: 0.075, x: 7 }, 11.8)
-  .to(['#armL', '#flashlightFront'], { duration: 0.075, x: 0 }, 11.875);
+  document.querySelectorAll(".before-after").forEach((slider) => {
+    const input = slider.querySelector("input");
+    const update = () => slider.style.setProperty("--pos", `${input.value}%`);
+    input.addEventListener("input", update);
+    update();
+  });
 
-function goDark() {
-  gsap.set('#light', { visibility: "hidden" });
-  gsap.set('.lettersSide', { fill: lettersSideDark, stroke: lettersStrokeDark });
-  gsap.set('.lettersFront', { fill: lettersFrontDark, stroke: lettersStrokeDark });
-  gsap.set('#lettersShadow', { opacity: 0.05 });
-  gsap.set('.hlFur', { fill: furDarkColor });
-  gsap.set('.hlSkin', { fill: skinDarkColor });
-}
+  document.querySelectorAll(".magnetic").forEach((element) => {
+    element.addEventListener("pointermove", (event) => {
+      if (!window.matchMedia("(pointer: fine)").matches) return;
+      const rect = element.getBoundingClientRect();
+      const x = (event.clientX - rect.left - rect.width / 2) * .2;
+      const y = (event.clientY - rect.top - rect.height / 2) * .2;
+      element.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    element.addEventListener("pointerleave", () => {
+      element.style.transform = "";
+    });
+  });
 
-function goLight() {
-  gsap.set('#light', { visibility: "visible" });
-  gsap.set('.lettersSide', { fill: lettersSideLight, stroke: lettersStrokeLight });
-  gsap.set('.lettersFront', { fill: lettersFrontLight, stroke: lettersStrokeLight });
-  gsap.set('#lettersShadow', { opacity: 0.2 });
-  gsap.set('.hlFur', { fill: furLightColor });
-  gsap.set('.hlSkin', { fill: skinLightColor });
-}
+  document.querySelectorAll(".tilt-card").forEach((card) => {
+    card.addEventListener("pointermove", (event) => {
+      if (!window.matchMedia("(pointer: fine)").matches) return;
+      const rect = card.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - .5;
+      const y = (event.clientY - rect.top) / rect.height - .5;
+      card.style.transform = `rotateY(${x * 8}deg) rotateX(${y * -8}deg) translateY(-4px)`;
+    });
+    card.addEventListener("pointerleave", () => {
+      card.style.transform = "";
+    });
+  });
 
-goDark();
+  /* --- Contact Form → Google Apps Script via fetch (no-cors) --- */
+  const contactForm = document.getElementById('contact-form');
+  const formStatus = document.getElementById('form-status');
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      formStatus.textContent = 'Sending...';
+      formStatus.style.color = 'var(--cyan)';   // matches your cyan accent
+
+      // Gather ALL field values
+      const payload = {
+        name:    document.getElementById('name').value,
+        phone:   document.getElementById('phone').value,
+        email:   document.getElementById('email').value,
+        service: document.getElementById('service').value,
+        message: document.getElementById('message').value
+      };
+
+      // Replace with your deployed Web App URL
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbxqGtEvRSVXyc6T6BTt74kpKbCdV5bhqN0_ANRfB1K56vOe7gnf-OMGGRz3KA78g0Rs/exec';
+
+      fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        formStatus.textContent = 'Thank you. Your inquiry has been submitted.';
+        formStatus.style.color = '#4CAF50';   // green success
+        contactForm.reset();
+      })
+      .catch(err => {
+        console.error('Submission error:', err);
+        formStatus.textContent = 'Error sending. Please try again or call us directly.';
+        formStatus.style.color = '#f51313';   // red error
+      });
+    });
+  }
+
+  // === Newsletter to separate Google Sheet ===
+  const newsletterScriptURL = 'https://script.google.com/macros/s/AKfycbzotYUnX5gq2_7ZTpg_5gDsuB4SzayMPRQC2k0Lhlhn2P-nf4lFdcj30ldeqNhkuWfaFg/exec';
+
+  document.querySelectorAll('form.newsletter').forEach(form => {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const input = this.querySelector('input[type="email"]');
+      if (!input || !input.value.trim()) return;
+
+      const email = input.value.trim();
+      const page = window.location.pathname.split('/').pop() || 'home';
+
+      fetch(newsletterScriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, page })
+      })
+      .then(() => {
+        input.value = '';
+        const note = document.createElement('span');
+        note.textContent = '✓ Subscribed';
+        note.style.cssText = 'color:#7ccbff;margin-left:8px;font-size:0.82rem;font-weight:700;';
+        this.appendChild(note);
+        setTimeout(() => note.remove(), 3000);
+      })
+      .catch(err => console.error('Newsletter signup error:', err));
+    });
+  });
+
+  // === GSAP Animations & ScrollTrigger (with Lenis smooth scrolling support) ===
+  function initCounters() {
+    const counters = document.querySelectorAll("[data-count]");
+    if (!counters.length) return;
+
+    const animate = (node) => {
+      const target = Number(node.dataset.count);
+      const suffix = node.dataset.suffix || "";
+      const duration = 1400;
+      const start = performance.now();
+
+      const tick = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        node.textContent = `${Math.round(target * eased).toLocaleString("en-IN")}${suffix}`;
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+
+      requestAnimationFrame(tick);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || entry.target.dataset.done) return;
+        entry.target.dataset.done = "true";
+        animate(entry.target);
+      });
+    }, { threshold: .45 });
+
+    counters.forEach((counter) => observer.observe(counter));
+  }
+
+  function splitHeadlines() {
+    document.querySelectorAll("[data-split]").forEach((heading) => {
+      if (heading.dataset.splitDone) return;
+      const lines = heading.innerHTML.split("<br>");
+      heading.innerHTML = lines.map((line) => `<span class="split-line">${line}</span>`).join("");
+      heading.dataset.splitDone = "true";
+    });
+  }
+
+  function initGsap() {
+    splitHeadlines();
+
+    const hasGsap = window.gsap && window.ScrollTrigger;
+    if (!hasGsap) {
+      document.querySelectorAll("[data-reveal]").forEach((item) => {
+        item.style.opacity = "1";
+        item.style.transform = "none";
+      });
+      return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    if (window.Lenis) {
+      const lenis = new Lenis({ lerp: .075, wheelMultiplier: .85, smoothWheel: true });
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    gsap.set("[data-reveal]", { y: 34, opacity: 0, filter: "blur(10px)" });
+    gsap.utils.toArray("[data-reveal]").forEach((element) => {
+      gsap.to(element, {
+        y: 0,
+        opacity: 1,
+        filter: "blur(0px)",
+        duration: .95,
+        ease: "power3.out",
+        scrollTrigger: { trigger: element, start: "top 86%" }
+      });
+    });
+
+    gsap.from(".hero .split-line, .page-hero .split-line", {
+      yPercent: 120,
+      opacity: 0,
+      duration: 1.1,
+      stagger: .08,
+      ease: "expo.out",
+      delay: .12
+    });
+
+    gsap.utils.toArray(".hero-media img, .page-hero-media img").forEach((image) => {
+      gsap.to(image, {
+        scale: 1.08,
+        yPercent: 7,
+        ease: "none",
+        scrollTrigger: {
+          trigger: image.closest("section"),
+          start: "top top",
+          end: "bottom top",
+          scrub: true
+        }
+      });
+    });
+
+    gsap.utils.toArray(".image-reveal").forEach((wrap) => {
+      gsap.fromTo(wrap.querySelector("img"), { scale: 1.15 }, {
+        scale: 1,
+        duration: 1.4,
+        ease: "power3.out",
+        scrollTrigger: { trigger: wrap, start: "top 80%" }
+      });
+    });
+
+    gsap.utils.toArray(".service-card, .project-card, .gallery-item, .brand-tile, .client-tile").forEach((card) => {
+      gsap.from(card, {
+        y: 36,
+        opacity: 0,
+        duration: .8,
+        ease: "power3.out",
+        scrollTrigger: { trigger: card, start: "top 88%" }
+      });
+    });
+  }
+
+  window.addEventListener("load", function() {
+  setTimeout(() => document.body.classList.add("loaded"), 1000);
+});
+
+})();
