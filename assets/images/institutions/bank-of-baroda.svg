@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 150" role="img" aria-labelledby="title">
-  <title id="title">Bank of Baroda logo representation</title>
-  <rect width="420" height="150" fill="none"/>
-  <path d="M41 86c0-31 25-56 56-56h29v29H97a27 27 0 1 0 0 54h29v-21H95V67h58v74H97c-31 0-56-24-56-55Z" fill="#F15A24"/>
-  <path d="M59 86c0-21 17-38 38-38h13v16H97a22 22 0 1 0 0 44h13v16H97c-21 0-38-17-38-38Z" fill="#fff" opacity=".82"/>
-  <text x="174" y="70" fill="#F15A24" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="900">Bank of Baroda</text>
-  <text x="174" y="101" fill="#F15A24" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="800" letter-spacing="1.4">INTERNATIONAL BANK</text>
-</svg>
